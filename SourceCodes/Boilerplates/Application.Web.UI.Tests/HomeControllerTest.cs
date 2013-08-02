@@ -1,8 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Web.Mvc;
 using NUnit.Framework;
 
 namespace Application.Web.UI.Tests
@@ -15,16 +10,14 @@ namespace Application.Web.UI.Tests
 		[SetUp]
 		public void Init()
 		{
-			
 		}
 
 		[TearDown]
 		public void Dispose()
 		{
-			
 		}
 
-		#endregion
+		#endregion SetUp / TearDown
 
 		#region Tests
 
@@ -33,6 +26,6 @@ namespace Application.Web.UI.Tests
 		{
 		}
 
-		#endregion
+		#endregion Tests
 	}
 }

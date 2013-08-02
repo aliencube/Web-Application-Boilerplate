@@ -1,6 +1,4 @@
-﻿using Application.DataAccessFramework;
-
-namespace Application.Repositories.Interfaces
+﻿namespace Application.Repositories.Interfaces
 {
 	/// <summary>
 	/// This provides interfaces to the CustomerRepository class.

@@ -1,9 +1,9 @@
-﻿using System;
-using System.Data;
-using System.Linq;
-using Application.DataAccessFramework;
+﻿using Application.DataAccessFramework;
 using Application.DataAccessFramework.Exceptions;
 using Application.Repositories.Interfaces;
+using System;
+using System.Data;
+using System.Linq;
 
 namespace Application.Repositories
 {
@@ -13,6 +13,7 @@ namespace Application.Repositories
 	public class CustomerRepository : BaseRepository, ICustomerRepository
 	{
 		#region Constructors
+
 		/// <summary>
 		/// Initialises a new instance of the CustomerRepository object.
 		/// </summary>
@@ -21,13 +22,17 @@ namespace Application.Repositories
 		{
 			this._context = context as ApplicationDataContext;
 		}
-		#endregion
+
+		#endregion Constructors
 
 		#region Properties
+
 		private readonly ApplicationDataContext _context;
-		#endregion
+
+		#endregion Properties
 
 		#region Methods
+
 		/// <summary>
 		/// Adds a new Customer object to the repository.
 		/// </summary>
@@ -49,7 +54,7 @@ namespace Application.Repositories
 			var item = this._context
 						   .Customers
 						   .SingleOrDefault(p => p.CustomerID == entityId);
-			return (T) Convert.ChangeType(item, typeof (T));
+			return (T)Convert.ChangeType(item, typeof(T));
 		}
 
 		/// <summary>
@@ -72,6 +77,7 @@ namespace Application.Repositories
 		{
 			this._context.Customers.Remove(entity as Customer);
 		}
-		#endregion
+
+		#endregion Methods
 	}
 }
