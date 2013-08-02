@@ -21,6 +21,7 @@
 	<link rel="apple-touch-icon-precomposed" sizes="114x114" href="~/apple-touch-icon-114x114.png" />
 	<link rel="apple-touch-icon-precomposed" sizes="144x144" href="~/apple-touch-icon-144x144.png" />
 	
+	@Styles.Render("~/Content/bootstrap")
 	@Styles.Render("~/Content/css")
 	@RenderSection("styles", required: false)
 	
@@ -28,13 +29,20 @@
 </head>
 <body>
 	<!--[if lt IE 8]>
-		<p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
+		<div class="container-fluid">
+			<div class="row-fluid">
+				<div class="span12">
+					<p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
+				</div>
+			</div>
+		</div>
 	<![endif]-->
 
 	@RenderBody()
 
 	<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 	<script type="text/javascript">window.jQuery || document.write('<script src="~/Scripts/jquery-1.10.2.min.js"><\/script>')</script>
+	@Scripts.Render("~/bundles/bootstrap")
 	@Scripts.Render("~/bundles/js")
 	@RenderSection("scripts", required: false)
 
