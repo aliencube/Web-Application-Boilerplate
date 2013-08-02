@@ -152,6 +152,8 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\images\glyphicons-halflings-white.png" />
     <Content Include="Content\images\glyphicons-halflings.png" />
+    <Content Include="Content\jquery.Placeholders.monkey.patch.css" />
+    <Content Include="Content\jquery.Placeholders.monkey.patch.min.css" />
     <Content Include="Content\main.css" />
     <Content Include="crossdomain.xml" />
     <Content Include="favicon.ico" />
@@ -161,10 +163,23 @@
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="Scripts\es5-shim.js" />
+    <Content Include="Scripts\es5-shim.min.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
+    <Content Include="Scripts\jquery.Placeholders.monkey.patch.js" />
+    <Content Include="Scripts\jquery.Placeholders.monkey.patch.min.js" />
+    <None Include="Scripts\linq-vsdoc.js" />
+    <Content Include="Scripts\linq.d.ts" />
+    <Content Include="Scripts\linq.jquery.d.ts" />
+    <Content Include="Scripts\linq.jquery.js" />
+    <Content Include="Scripts\linq.jquery.min.js" />
+    <Content Include="Scripts\linq.js" />
+    <Content Include="Scripts\linq.min.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\modernizr-2.6.2.min.js" />
+    <Content Include="Scripts\Placeholders.js" />
+    <Content Include="Scripts\Placeholders.min.js" />
     <Content Include="Scripts\plugins.js" />
     <Content Include="Scripts\main.js" />
     <Content Include="Templates\Errors\404.html" />
@@ -177,6 +192,7 @@
     </Content>
     <Content Include="Views\Web.config" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
+    <Content Include="Scripts\jquery.Placeholders.monkey.patch.min.js.map" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Models\" />

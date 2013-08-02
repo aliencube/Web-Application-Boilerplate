@@ -24,13 +24,34 @@
 </head>
 <body>
 	<!--[if lt IE 8]>
-		<p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
+		<div class="container-fluid">
+			<div class="row-fluid">
+				<div class="span12">
+					<p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
+				</div>
+			</div>
+		</div>
 	<![endif]-->
 
-	<h1>Page Not Found</h1>
+	<div class="container-fluid">
+		<div class="row-fluid">
+			<div class="span12 text-center">
+				<h1>Page Not Found</h1>
+			</div>
+		</div>
+	</div>
 
 	<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 	<script type="text/javascript">window.jQuery || document.write('<script src="/Scripts/jquery-1.10.2.min.js"><\/script>')</script>
+	<script type="text/javascript" src="/Scripts/bootstrap.min.js"></script>
+	<!--[if lte IE 8]>
+		<script type="text/javascript" src="/Scripts/es5-shim.min.js"></script>
+
+	<![endif]-->
+	<script type="text/javascript" src="/Scripts/Placeholders.min.js"></script>
+	<script type="text/javascript" src="/Scripts/jquery.Placeholders.monkey.patch.min.js"></script>
+	<script type="text/javascript" src="/Scripts/linq.min.js"></script>
+	<script type="text/javascript" src="/Scripts/linq.jquery.min.js"></script>
 	<script type="text/javascript">
 		var GOOG_FIXURL_LANG = (navigator.language || '').slice(0, 2), GOOG_FIXURL_SITE = location.host;
 	</script>

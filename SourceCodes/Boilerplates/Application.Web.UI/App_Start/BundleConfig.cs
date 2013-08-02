@@ -10,9 +10,13 @@ namespace Application.Web.UI.App_Start
 		{
 			//	CSS bundles.
 			BundleTable.Bundles.Add(new StyleBundle("~/Content/css").Include("~/Content/main.css"));
+			BundleTable.Bundles.Add(new StyleBundle("~/Content/placeholders").Include("~/Content/jquery.Placeholders.monkey.patch.css"));
 
 			//	Javascript bundles.
 			BundleTable.Bundles.Add(new ScriptBundle("~/bundles/modernizr").Include("~/Scripts/modernizr-2.6.2.js"));
+			BundleTable.Bundles.Add(new ScriptBundle("~/bundles/es5-shim").Include("~/Scripts/es5-shim.js"));
+			BundleTable.Bundles.Add(new ScriptBundle("~/bundles/placeholders").Include("~/Scripts/Placeholders.js", "~/Scripts/jquery.Placeholders.monkey.patch.js"));
+			BundleTable.Bundles.Add(new ScriptBundle("~/bundles/linq").Include("~/Scripts/linq.js", "~/Scripts/linq.jquery.js"));
 			BundleTable.Bundles.Add(new ScriptBundle("~/bundles/js").Include("~/Scripts/plugins.js", "~/Scripts/main.js"));
 		}
 	}

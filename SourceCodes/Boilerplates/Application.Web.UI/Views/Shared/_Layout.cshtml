@@ -22,6 +22,7 @@
 	<link rel="apple-touch-icon-precomposed" sizes="144x144" href="~/apple-touch-icon-144x144.png" />
 	
 	@Styles.Render("~/Content/bootstrap")
+	@Styles.Render("~/Content/placeholders")
 	@Styles.Render("~/Content/css")
 	@RenderSection("styles", required: false)
 	
@@ -43,6 +44,11 @@
 	<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 	<script type="text/javascript">window.jQuery || document.write('<script src="~/Scripts/jquery-1.10.2.min.js"><\/script>')</script>
 	@Scripts.Render("~/bundles/bootstrap")
+	<!--[if lte IE 8]>
+		@Scripts.Render("~/bundles/es5-shim")
+	<![endif]-->
+	@Scripts.Render("~/bundles/placeholders")
+	@Scripts.Render("~/bundles/linq")
 	@Scripts.Render("~/bundles/js")
 	@RenderSection("scripts", required: false)
 

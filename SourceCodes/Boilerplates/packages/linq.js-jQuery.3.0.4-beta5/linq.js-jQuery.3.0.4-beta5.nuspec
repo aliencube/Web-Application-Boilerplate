@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
+  <metadata>
+    <id>linq.js-jQuery</id>
+    <version>3.0.4-beta5</version>
+    <title>linq.js - jQuery Binding</title>
+    <authors>neuecc</authors>
+    <owners>neuecc</owners>
+    <licenseUrl>http://linqjs.codeplex.com/license</licenseUrl>
+    <projectUrl>http://linqjs.codeplex.com/</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>linq.js binding for jQuery.</description>
+    <language>en-US</language>
+    <tags>linq javascript jquery typescript</tags>
+    <dependencies>
+      <dependency id="linq.js" version="3.0.4-beta5" />
+      <dependency id="jQuery" version="[1.3.1, ]" />
+    </dependencies>
+  </metadata>
+</package>
