@@ -1,6 +1,7 @@
 ﻿using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Routing;
+using Application.IoC;
 
 namespace Application.Web.UI
 {
@@ -15,6 +16,8 @@ namespace Application.Web.UI
 			WebApiConfig.Register(GlobalConfiguration.Configuration);
 			FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
 			RouteConfig.RegisterRoutes(RouteTable.Routes);
+
+			Bootstrapper.Initialise();
 		}
 	}
 }
