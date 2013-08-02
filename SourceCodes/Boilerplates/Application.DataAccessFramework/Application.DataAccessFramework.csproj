@@ -30,8 +30,15 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EntityFramework">
+      <HintPath>..\packages\EntityFramework.5.0.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data.Entity" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -39,7 +46,102 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Address.cs">
+      <DependentUpon>ApplicationDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ApplicationDataContext.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ApplicationDataContext.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ApplicationDataContext.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ApplicationDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ApplicationDataContext.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ApplicationDataContext.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="BuildVersion.cs">
+      <DependentUpon>ApplicationDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Customer.cs">
+      <DependentUpon>ApplicationDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CustomerAddress.cs">
+      <DependentUpon>ApplicationDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ErrorLog.cs">
+      <DependentUpon>ApplicationDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Exceptions\DataContextAlreadyExistException.cs" />
+    <Compile Include="Exceptions\DataContextNotChangedException.cs" />
+    <Compile Include="IApplicationDataContext.cs" />
+    <Compile Include="Product.cs">
+      <DependentUpon>ApplicationDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ProductCategory.cs">
+      <DependentUpon>ApplicationDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ProductDescription.cs">
+      <DependentUpon>ApplicationDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ProductModel.cs">
+      <DependentUpon>ApplicationDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ProductModelProductDescription.cs">
+      <DependentUpon>ApplicationDataContext.tt</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SalesOrderDetail.cs">
+      <DependentUpon>ApplicationDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SalesOrderHeader.cs">
+      <DependentUpon>ApplicationDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ufnGetAllCategories_Result.cs">
+      <DependentUpon>ApplicationDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ufnGetCustomerInformation_Result.cs">
+      <DependentUpon>ApplicationDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="vGetAllCategory.cs">
+      <DependentUpon>ApplicationDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="vProductAndDescription.cs">
+      <DependentUpon>ApplicationDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="vProductModelCatalogDescription.cs">
+      <DependentUpon>ApplicationDataContext.tt</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EntityDeploy Include="ApplicationDataContext.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>ApplicationDataContext.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.Config" />
+    <None Include="ApplicationDataContext.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>ApplicationDataContext.edmx</DependentUpon>
+      <LastGenOutput>ApplicationDataContext.Context.cs</LastGenOutput>
+    </None>
+    <None Include="ApplicationDataContext.edmx.diagram">
+      <DependentUpon>ApplicationDataContext.edmx</DependentUpon>
+    </None>
+    <None Include="ApplicationDataContext.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>ApplicationDataContext.edmx</DependentUpon>
+      <LastGenOutput>ApplicationDataContext.cs</LastGenOutput>
+    </None>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
