@@ -137,6 +137,7 @@
     <Content Include="Global.asax" />
     <Content Include="Localisation\Resource.en.xml" />
     <Content Include="robots.txt" />
+    <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\plugins.js" />
     <Content Include="Scripts\main.js" />
     <Content Include="Templates\Errors\404.html" />
