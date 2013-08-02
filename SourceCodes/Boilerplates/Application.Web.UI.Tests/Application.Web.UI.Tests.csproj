@@ -6,7 +6,7 @@
     <ProductVersion>
     </ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{80502C3D-D51C-487C-9214-1E232FC43A79}</ProjectGuid>
+    <ProjectGuid>{D522A7F2-F8AD-454D-B064-F0F9B9E3B6E3}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Application.Web.UI.Tests</RootNamespace>
@@ -33,6 +33,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="LocalisationResourcesManager.Configuration">
+      <HintPath>..\..\..\Libraries\LocalisationResourcesManager.Configuration\LocalisationResourcesManager.Configuration.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\packages\Newtonsoft.Json.5.0.6\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -120,23 +123,30 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="HomeControllerTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="App.config" />
+    <Content Include="Localisation\Resource.en.xml" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Application.Web.UI\Application.Web.UI.csproj">
-      <Project>{2722189B-E16F-426C-A30A-5F7E7991272A}</Project>
+      <Project>{32EF8C60-FC02-4E34-9FBA-C052B6508229}</Project>
       <Name>Application.Web.UI</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Microsoft.Bcl.Build.1.0.8\tools\Microsoft.Bcl.Build.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>IF NOT EXIST "$(ProjectDir)Localisation" (
+  md "$(ProjectDir)Localisation"
+)
+
+xcopy "$(SolutionDir)LocalisationResourcesConverter.Console\Localisation\*.xml" "$(ProjectDir)Localisation" /y</PreBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
