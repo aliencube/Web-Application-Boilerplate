@@ -20,27 +20,29 @@
 	<link rel="apple-touch-icon-precomposed" sizes="114x114" href="~/apple-touch-icon-114x114.png" />
 	<link rel="apple-touch-icon-precomposed" sizes="144x144" href="~/apple-touch-icon-144x144.png" />
 
-	<link rel="stylesheet" href="~/Content/main.css" />
+	<link type="text/javascript" type="text/css" rel="stylesheet" href="~/Content/main.css" />
+	@RenderSection("styles", required: false)
 
 	<script src="~/Scripts/modernizr-2.6.2.min.js"></script>
 </head>
 <body>
-	<!--[if lt IE 7]>
+	<!--[if lt IE 8]>
 		<p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
 	<![endif]-->
 
-	<p>Hello world! This is HTML5 Boilerplate.</p>
+	@RenderBody()
 
-	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-	<script>window.jQuery || document.write('<script src="~/Scripts/jquery-1.10.2.min.js"><\/script>')</script>
-	<script src="~/Scripts/plugins.js"></script>
-	<script src="~/Scripts/main.js"></script>
+	<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+	<script type="text/javascript">window.jQuery || document.write('<script src="~/Scripts/jquery-1.10.2.min.js"><\/script>')</script>
+	<script type="text/javascript" src="~/Scripts/plugins.js"></script>
+	<script type="text/javascript" src="~/Scripts/main.js"></script>
+	@RenderSection("scripts", required: false)
 
 	<!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
-	<script>
-		(function(b, o, i, l, e, r) {
+	<script type="text/javascript">
+		(function (b, o, i, l, e, r) {
 			b.GoogleAnalyticsObject = l;
-			b[l] || (b[l] = function() { (b[l].q = b[l].q || []).push(arguments) });
+			b[l] || (b[l] = function () { (b[l].q = b[l].q || []).push(arguments); });
 			b[l].l = +new Date;
 			e = o.createElement(i);
 			r = o.getElementsByTagName(i)[0];
