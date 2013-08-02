@@ -20,6 +20,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LocalisationResourcesConver
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application.DataAccessFramework", "Application.DataAccessFramework\Application.DataAccessFramework.csproj", "{D9F88E56-04AB-472D-9202-1DDCB40C7A36}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application.Repositories", "Application.Repositories\Application.Repositories.csproj", "{300A7085-6F85-47E6-A56D-9E4E2B1F15DD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -42,6 +44,10 @@ Global
 		{D9F88E56-04AB-472D-9202-1DDCB40C7A36}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D9F88E56-04AB-472D-9202-1DDCB40C7A36}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D9F88E56-04AB-472D-9202-1DDCB40C7A36}.Release|Any CPU.Build.0 = Release|Any CPU
+		{300A7085-6F85-47E6-A56D-9E4E2B1F15DD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{300A7085-6F85-47E6-A56D-9E4E2B1F15DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{300A7085-6F85-47E6-A56D-9E4E2B1F15DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{300A7085-6F85-47E6-A56D-9E4E2B1F15DD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
