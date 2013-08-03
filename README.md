@@ -26,6 +26,7 @@ In order to provide a template, This boilerplate uses the following resources:
   * Placeholders.js [http://jamesallardice.github.io/Placeholders.js](http://jamesallardice.github.io/Placeholders.js)
   * Placeholders.js Monkey Patch [https://github.com/aliencube/Placeholders.js-Monkey-Patch](https://github.com/aliencube/Placeholders.js-Monkey-Patch)
   * es5-shim.js [https://github.com/kriskowal/es5-shim](https://github.com/kriskowal/es5-shim)
+  * LINQ.js [http://linqjs.codeplex.com](http://linqjs.codeplex.com)
 * For back-end
   * Unity [http://msdn.microsoft.com/en-us/library/dd203101.aspx](http://msdn.microsoft.com/en-us/library/dd203101.aspx)
   * Unity.MVC [http://unitymvc3.codeplex.com](http://unitymvc3.codeplex.com)
