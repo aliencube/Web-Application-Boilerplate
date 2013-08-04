@@ -10,6 +10,6 @@ namespace Application.Services.Interfaces
 		/// <summary>
 		/// Gets or sets the current HttpContext instance.
 		/// </summary>
-		HttpContext HttpContext { get; set; }
+		HttpContextBase HttpContext { get; set; }
 	}
 }

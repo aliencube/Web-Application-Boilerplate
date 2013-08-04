@@ -8,17 +8,17 @@ namespace Application.Services
 	/// </summary>
 	public class HttpContextService : IHttpContextService
 	{
-		private HttpContext _httpContext;
+		private HttpContextBase _httpContext;
 
 		/// <summary>
 		/// Gets or sets the current HttpContext instance.
 		/// </summary>
-		public HttpContext HttpContext
+		public HttpContextBase HttpContext
 		{
 			get
 			{
 				if (this._httpContext == null)
-					this._httpContext = HttpContext.Current;
+					this._httpContext = new HttpContextWrapper(System.Web.HttpContext.Current);
 				return this._httpContext;
 			}
 			set { this._httpContext = value; }

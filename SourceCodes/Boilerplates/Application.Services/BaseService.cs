@@ -36,7 +36,7 @@ namespace Application.Services
 		/// <summary>
 		/// Gets the current HttpContext instance.
 		/// </summary>
-		protected HttpContext Context { get; private set; }
+		protected HttpContextBase Context { get; private set; }
 
 		#endregion Properties
 

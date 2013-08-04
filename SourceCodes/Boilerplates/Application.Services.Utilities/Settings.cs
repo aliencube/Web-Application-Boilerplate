@@ -46,17 +46,17 @@ namespace Application.Services.Utilities
 
 		private static Settings _instance;
 
-		private HttpContext _context;
+		private HttpContextBase _context;
 
 		/// <summary>
 		/// Gets or sets the current HttpContext instance.
 		/// </summary>
-		public HttpContext Context
+		public HttpContextBase Context
 		{
 			get
 			{
 				if (this._context == null)
-					this._context = HttpContext.Current;
+					this._context = new HttpContextWrapper(HttpContext.Current);
 				return this._context;
 			}
 			set
