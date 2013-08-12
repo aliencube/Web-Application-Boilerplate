@@ -11,6 +11,8 @@ using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 
+[assembly: log4net.Config.XmlConfigurator(Watch = true)]
+
 namespace Boilerplate.Builder.Console
 {
 	/// <summary>
