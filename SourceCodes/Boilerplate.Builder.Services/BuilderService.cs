@@ -1,5 +1,7 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Text;
 using Boilerplate.Builder.Services.Interfaces;
 using Boilerplate.Builder.Services.Utilities;
 using Boilerplate.Builder.ViewModels;
@@ -26,7 +28,7 @@ namespace Boilerplate.Builder.Services
 
 		#region Properties
 
-		private Settings _settings;
+		private readonly Settings _settings;
 
 		#endregion Properties
 
@@ -39,35 +41,79 @@ namespace Boilerplate.Builder.Services
 		public void ProcessRequests(ConsoleParameter parameter)
 		{
 			var ns = parameter.Namespace;
-			this.ChangeNamespaceOnDirectories(ns);
 			this.ChangeNamespaceOnSolution(ns);
 			this.ChangeNamespaceOnProjects(ns);
 			this.ChangeNamespaceOnPackages(ns);
+			this.ChangeNamespaceOnDirectories(ns);
 		}
 
+		/// <summary>
+		/// Changes the contents of the solution file and its name with the given namespace.
+		/// </summary>
+		/// <param name="ns">Namespace to be applied.</param>
+		private void ChangeNamespaceOnSolution(string ns)
+		{
+			var sln = Directory.GetFiles(this._settings.BoilerplatePath).Single(p => p.EndsWith(".sln"));
+
+			//	Changes namespace within the solution file.
+			string converted;
+			using (var reader = new StreamReader(sln))
+			{
+				var content = reader.ReadToEnd();
+				converted = content.Replace("Application.", ns + ".");
+			}
+			using (var writer = new StreamWriter(sln, false, Encoding.UTF8))
+			{
+				writer.Write(converted);
+			}
+			//	Renames the solution file.
+			File.Move(sln, sln.Replace("Application.", ns + "."));
+		}
+
+		/// <summary>
+		/// Changes the contents of each project and its name with the given namespace.
+		/// </summary>
+		/// <param name="ns">Namespace to be applied.</param>
+		private void ChangeNamespaceOnProjects(string ns)
+		{
+			var directories = this.GetProjectDirectories();
+			foreach (var directory in directories)
+			{
+				
+			}
+		}
+
+		/// <summary>
+		/// Changes the path of the package with the given namespace.
+		/// </summary>
+		/// <param name="ns">Namespace to be applied.</param>
+		private void ChangeNamespaceOnPackages(string ns)
+		{
+		}
+
+		/// <summary>
+		/// Changes directories containing projects with the given namespace.
+		/// </summary>
+		/// <param name="ns">Namespace to be applied.</param>
 		private void ChangeNamespaceOnDirectories(string ns)
 		{
-			var directories = Directory.GetDirectories(this._settings.BoilerplatePath)
-			                           .Where(p => p.StartsWith("Application."))
-			                           .ToList();
+			var directories = this.GetProjectDirectories();
 			foreach (var directory in directories)
 			{
 				Directory.Move(directory, directory.Replace("Application.", ns + "."));
 			}
 		}
 
-		private void ChangeNamespaceOnSolution(string ns)
+		/// <summary>
+		/// Gets the list of project directories to apply namespace given.
+		/// </summary>
+		/// <returns>Returns the list of project directories to apply namespace given.</returns>
+		private IEnumerable<string> GetProjectDirectories()
 		{
-			var sln = Directory.GetFiles(this._settings.BoilerplatePath).Single(p => p.EndsWith(".sln"));
-			File.Move(sln, sln.Replace("Application.", ns + "."));
-		}
-
-		private void ChangeNamespaceOnProjects(string ns)
-		{
-		}
-
-		private void ChangeNamespaceOnPackages(string ns)
-		{
+			var directories = Directory.GetDirectories(this._settings.BoilerplatePath)
+									   .Where(p => p.StartsWith("Application."))
+									   .ToList();
+			return directories;
 		}
 
 		#endregion Methods
