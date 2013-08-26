@@ -194,6 +194,13 @@
       <DependentUpon>jquery.Placeholders.monkey.patch.min.js</DependentUpon>
     </Content>
     <None Include="Scripts\linq-vsdoc.js" />
+    <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
+    <Content Include="Scripts\jquery.validate.js" />
+    <Content Include="Scripts\jquery.validate.min.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\linq.js" />
     <Content Include="Scripts\linq.d.ts">
       <DependentUpon>linq.js</DependentUpon>
