@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -22,6 +23,9 @@ namespace Boilerplate.Builder.Services
 		public BuilderService(Settings settings)
 		{
 			this._settings = settings;
+			this._documentsPath = this.GetBoilerplatesDirectoryPath("Documents");
+			this._librariesPath = this.GetBoilerplatesDirectoryPath("Libraries");
+			this._sourceCodesPath = this.GetBoilerplatesDirectoryPath("SourceCodes");
 		}
 
 		#endregion Constructors
@@ -29,10 +33,24 @@ namespace Boilerplate.Builder.Services
 		#region Properties
 
 		private readonly Settings _settings;
+		private readonly string _sourceCodesPath;
+		private readonly string _documentsPath;
+		private readonly string _librariesPath;
 
 		#endregion Properties
 
 		#region Methods
+
+		/// <summary>
+		/// Gets the full directory path for the boilerplates.
+		/// </summary>
+		/// <param name="directoryName">Directory name</param>
+		/// <returns>Returns the full directory path for the boilerplates.</returns>
+		private string GetBoilerplatesDirectoryPath(string directoryName)
+		{
+			var path = String.Format(@"{0}\{1}", this._settings.BoilerplatePath, directoryName);
+			return path;
+		}
 
 		/// <summary>
 		/// Processes the requests.
@@ -53,7 +71,7 @@ namespace Boilerplate.Builder.Services
 		/// <param name="ns">Namespace to be applied.</param>
 		private void ChangeNamespaceOnSolution(string ns)
 		{
-			var sln = Directory.GetFiles(this._settings.BoilerplatePath).Single(p => p.EndsWith(".sln"));
+			var sln = Directory.GetFiles(this._sourceCodesPath).Single(p => p.EndsWith(".sln"));
 
 			//	Changes namespace within the solution file.
 			string converted;
