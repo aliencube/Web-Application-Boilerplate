@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using Boilerplate.Builder.Services.Interfaces;
-using Boilerplate.Builder.Services.Utilities;
+using Boilerplate.Builder.Services.Utilities.Interfaces;
 using Boilerplate.Builder.ViewModels;
 
 namespace Boilerplate.Builder.Services
@@ -20,7 +20,7 @@ namespace Boilerplate.Builder.Services
 		/// Initialises a new instance of the BuilderService object.
 		/// </summary>
 		/// <param name="settings">Configuration settings instance.</param>
-		public BuilderService(Settings settings)
+		public BuilderService(ISettings settings)
 		{
 			this._settings = settings;
 			this._documentsPath = this.GetBoilerplatesDirectoryPath("Documents");
@@ -32,7 +32,7 @@ namespace Boilerplate.Builder.Services
 
 		#region Properties
 
-		private readonly Settings _settings;
+		private readonly ISettings _settings;
 		private readonly string _sourceCodesPath;
 		private readonly string _documentsPath;
 		private readonly string _librariesPath;
@@ -95,10 +95,60 @@ namespace Boilerplate.Builder.Services
 		private void ChangeNamespaceOnProjects(string ns)
 		{
 			var directories = this.GetProjectDirectories();
+			var files = new List<string>();
 			foreach (var directory in directories)
 			{
-				
+				var fs = this.GetFilesFromDirectory(directory);
+				files.AddRange(fs);
+
+				var subdirectories = Directory.GetDirectories(directory)
+				                              .Where(p => this._settings
+				                                              .DirectoriesToExclude
+				                                              .Contains(p.Split(new string[] {"\\"},
+				                                                                StringSplitOptions.RemoveEmptyEntries)
+				                                                         .Last()));
+				foreach (var subdirectory in subdirectories)
+				{
+					fs = this.GetFilesFromDirectory(subdirectory);
+					files.AddRange(fs);
+				}
 			}
+		}
+
+		/// <summary>
+		/// Gets the list of directories within the project recursively.
+		/// </summary>
+		/// <param name="directory">Parent directory.</param>
+		/// <returns>Returns the list of directories within the project recursively.</returns>
+		private IList<string> GetDirectoriesInProject(string directory)
+		{
+			var subdirectories = Directory.GetDirectories(directory)
+			                              .Where(p => this._settings
+			                                              .DirectoriesToExclude
+			                                              .Contains(p.Split(new string[] {"\\"},
+			                                                                StringSplitOptions.RemoveEmptyEntries)
+			                                                         .Last()))
+			                              .ToList();
+			var directories = subdirectories;
+			foreach (var subdirectory in subdirectories)
+				directories.AddRange(this.GetDirectoriesInProject(subdirectory));
+
+			return directories;
+		}
+
+		/// <summary>
+		/// Gets the list of files from the given directory path, except files to be excluded.
+		/// </summary>
+		/// <param name="directory">Directory path to get the list of files.</param>
+		/// <returns>Returns the list of files from the given directory path, except files to be excluded.</returns>
+		private IList<string> GetFilesFromDirectory(string directory)
+		{
+			var files = Directory.GetFiles(directory, "*.*")
+			                     .Where(p => !this._settings
+			                                      .FileExtensionsToExclude
+			                                      .Contains(Path.GetExtension(p)))
+			                     .ToList();
+			return files;
 		}
 
 		/// <summary>

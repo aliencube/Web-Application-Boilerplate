@@ -1,15 +1,18 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
+using Boilerplate.Builder.Services.Utilities.Interfaces;
 
 namespace Boilerplate.Builder.Services.Utilities
 {
 	/// <summary>
 	/// This represents the application configuration settings entity.
 	/// </summary>
-	public class Settings
+	public class Settings : ISettings
 	{
 		#region Constructors
 
@@ -53,6 +56,40 @@ namespace Boilerplate.Builder.Services.Utilities
 				var value = ConfigurationManager.AppSettings["App.BoilerplatePath"];
 				var path = GetFullPath(value);
 				return path;
+			}
+		}
+
+		/// <summary>
+		/// Gets the list of directories to exclude building boilerplates.
+		/// </summary>
+		public IList<string> DirectoriesToExclude
+		{
+			get
+			{
+				var value = ConfigurationManager.AppSettings["App.DirectoriesToExclude"];
+				if (String.IsNullOrWhiteSpace(value))
+					value = "App_Data,bin,Content,Localisation,Logs,obj,Scripts,Temp,Templates";
+
+				var results = value.Split(new string[] {","}, StringSplitOptions.RemoveEmptyEntries)
+				                   .ToList();
+				return results;
+			}
+		}
+
+		/// <summary>
+		/// Gets the list of file extensions to exclude building boilerplates.
+		/// </summary>
+		public IList<string> FileExtensionsToExclude
+		{
+			get
+			{
+				var value = ConfigurationManager.AppSettings["App.FileExtensionsToExclude"];
+				if (String.IsNullOrWhiteSpace(value))
+					value = "gif,ico,jpg,ldf,mdf,png,user,xml";
+
+				var results = value.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries)
+								   .ToList();
+				return results;
 			}
 		}
 
