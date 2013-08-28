@@ -128,7 +128,7 @@ namespace Boilerplate.Builder.Services
 		/// <returns>Returns the list of project directories to apply namespace given.</returns>
 		private IEnumerable<string> GetProjectDirectories()
 		{
-			var directories = Directory.GetDirectories(this._settings.BoilerplatePath)
+			var directories = Directory.GetDirectories(this._sourceCodesPath)
 									   .Where(p => p.StartsWith("Application."))
 									   .ToList();
 			return directories;
