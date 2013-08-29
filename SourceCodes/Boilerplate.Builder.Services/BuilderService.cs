@@ -48,7 +48,9 @@ namespace Boilerplate.Builder.Services
 		/// <returns>Returns the full directory path for the boilerplates.</returns>
 		private string GetBoilerplatesDirectoryPath(string directoryName)
 		{
-			var path = String.Format(@"{0}\{1}", this._settings.BoilerplatePath, directoryName);
+			var path = String.Format(@"{0}\{1}",
+			                         this._settings.BoilerplatePath,
+			                         directoryName);
 			return path;
 		}
 
@@ -71,7 +73,8 @@ namespace Boilerplate.Builder.Services
 		/// <param name="ns">Namespace to be applied.</param>
 		private void ChangeNamespaceOnSolution(string ns)
 		{
-			var file = Directory.GetFiles(this._sourceCodesPath).Single(p => p.EndsWith(".sln"));
+			var file = Directory.GetFiles(this._sourceCodesPath)
+			                    .Single(p => p.EndsWith(".sln"));
 
 			this.ChangeNamespaceOnFile(ns, file);
 		}
@@ -92,49 +95,46 @@ namespace Boilerplate.Builder.Services
 					files.AddRange(this.GetFilesFromDirectory(subdirectory));
 
 				//	Changes namespace on each file.
-				this.ChangeNamespaceOnFile(ns, files);
+				this.ChangeNamespaceOnFiles(ns, files);
 			}
 		}
 
 		/// <summary>
-		/// Changes namespace on a file.
+		/// Changes the path of the package with the given namespace.
 		/// </summary>
 		/// <param name="ns">Namespace to be applied.</param>
-		/// <param name="file">Filepath.</param>
-		private void ChangeNamespaceOnFile(string ns, string file)
+		private void ChangeNamespaceOnPackages(string ns)
 		{
-			this.ChangeNamespaceOnFile(ns, new List<string>() {file});
+			var file = Directory.GetFiles(this._sourceCodesPath + @"\packages")
+			                    .Single(p => p.EndsWith(".config"));
+
+			this.ChangeNamespaceOnFile(ns, file);
 		}
 
 		/// <summary>
-		/// Changes namespace on list of files.
+		/// Changes directories containing projects with the given namespace.
 		/// </summary>
 		/// <param name="ns">Namespace to be applied.</param>
-		/// <param name="files">List of filepaths.</param>
-		private void ChangeNamespaceOnFile(string ns, IEnumerable<string> files)
+		private void ChangeNamespaceOnDirectories(string ns)
 		{
-			foreach (var file in files)
+			var directories = this.GetProjectDirectories();
+			foreach (var directory in directories)
 			{
-				//	Changes namespaces on contents of the file.
-				string converted;
-				using (var reader = new StreamReader(file))
-				{
-					var content = reader.ReadToEnd();
-					converted = content.Replace("Application.", String.Format("{0}.", ns));
-				}
-				using (var writer = new StreamWriter(file, false, Encoding.UTF8))
-				{
-					writer.Write(converted);
-				}
-
-				//	Renames if the filename itself contains namespace.
-				var filename = Path.GetFileName(file);
-				if (filename == null || !filename.Contains("Application."))
-					continue;
-
-				var path = Path.GetDirectoryName(file);
-				File.Move(file, String.Format("{0}\\{1}", path, filename.Replace("Application.", String.Format("{0}.", ns))));
+				Directory.Move(directory,
+				               directory.Replace("Application.", String.Format("{0}.", ns)));
 			}
+		}
+
+		/// <summary>
+		/// Gets the list of project directories to apply namespace given.
+		/// </summary>
+		/// <returns>Returns the list of project directories to apply namespace given.</returns>
+		private IEnumerable<string> GetProjectDirectories()
+		{
+			var directories = Directory.GetDirectories(this._sourceCodesPath)
+									   .Where(p => p.StartsWith("Application."))
+									   .ToList();
+			return directories;
 		}
 
 		/// <summary>
@@ -146,12 +146,12 @@ namespace Boilerplate.Builder.Services
 		public IList<string> GetSubdirectories(string directory, bool recursive = true)
 		{
 			var subdirectories = Directory.GetDirectories(directory)
-			                              .Where(p => !this._settings
-			                                               .DirectoriesToExclude
-			                                               .Contains(p.Split(new string[] {"\\"},
-			                                                                 StringSplitOptions.RemoveEmptyEntries)
-			                                                          .Last()))
-			                              .ToList();
+										  .Where(p => !this._settings
+														   .DirectoriesToExclude
+														   .Contains(p.Split(new string[] { "\\" },
+																			 StringSplitOptions.RemoveEmptyEntries)
+																	  .Last()))
+										  .ToList();
 			if (!recursive)
 				return subdirectories;
 
@@ -178,36 +178,46 @@ namespace Boilerplate.Builder.Services
 		}
 
 		/// <summary>
-		/// Changes the path of the package with the given namespace.
+		/// Changes namespace on a file.
 		/// </summary>
 		/// <param name="ns">Namespace to be applied.</param>
-		private void ChangeNamespaceOnPackages(string ns)
+		/// <param name="file">Filepath.</param>
+		private void ChangeNamespaceOnFile(string ns, string file)
 		{
+			this.ChangeNamespaceOnFiles(ns, new List<string>() { file });
 		}
 
 		/// <summary>
-		/// Changes directories containing projects with the given namespace.
+		/// Changes namespace on list of files.
 		/// </summary>
 		/// <param name="ns">Namespace to be applied.</param>
-		private void ChangeNamespaceOnDirectories(string ns)
+		/// <param name="files">List of filepaths.</param>
+		private void ChangeNamespaceOnFiles(string ns, IEnumerable<string> files)
 		{
-			var directories = this.GetProjectDirectories();
-			foreach (var directory in directories)
+			foreach (var file in files)
 			{
-				Directory.Move(directory, directory.Replace("Application.", ns + "."));
-			}
-		}
+				//	Changes namespaces on contents of the file.
+				string converted;
+				using (var reader = new StreamReader(file))
+				{
+					var content = reader.ReadToEnd();
+					converted = content.Replace("Application.", String.Format("{0}.", ns));
+				}
+				using (var writer = new StreamWriter(file, false, Encoding.UTF8))
+				{
+					writer.Write(converted);
+				}
 
-		/// <summary>
-		/// Gets the list of project directories to apply namespace given.
-		/// </summary>
-		/// <returns>Returns the list of project directories to apply namespace given.</returns>
-		private IEnumerable<string> GetProjectDirectories()
-		{
-			var directories = Directory.GetDirectories(this._sourceCodesPath)
-									   .Where(p => p.StartsWith("Application."))
-									   .ToList();
-			return directories;
+				//	Renames if the filename itself contains namespace.
+				var filename = Path.GetFileName(file);
+				if (filename == null || !filename.Contains("Application."))
+					continue;
+
+				var path = Path.GetDirectoryName(file);
+				File.Move(file, String.Format("{0}\\{1}",
+				                              path,
+				                              filename.Replace("Application.", String.Format("{0}.", ns))));
+			}
 		}
 
 		#endregion Methods
