@@ -75,6 +75,7 @@ DocProject/Help/html
 # Click-Once directory
 publish
 [Pp]ublished
+[Bb]uild
 
 # Publish Web Output
 *.[Pp]ublish.xml
