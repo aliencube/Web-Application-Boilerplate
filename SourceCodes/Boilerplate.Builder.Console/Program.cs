@@ -78,7 +78,7 @@ namespace Boilerplate.Builder.Console
 			sb.AppendLine("  WebApplicationBoilerplateBuilderConsole.exe /n:[Default Namespace]");
 			sb.AppendLine();
 			sb.AppendLine("Parameter:");
-			sb.AppendLine("  /n:[Namespace]  Sets the default namespace of the boilerplate.");
+			sb.AppendLine("  /ns:[Namespace]  Sets the default namespace of the boilerplate.");
 			sb.AppendLine("                  If empty, the default namespace will be \"Application\".");
 			sb.AppendLine();
 
@@ -118,11 +118,11 @@ namespace Boilerplate.Builder.Console
 			var param = new ConsoleParameter();
 
 			var ns = args[0];
-			if (!ns.ToLower().StartsWith("/n:"))
+			if (!ns.ToLower().StartsWith("/ns:"))
 				throw new ArgumentException("Invalid arguments");
 
 			param.Namespace = Regex.Replace(ns.Trim(),
-			                                "^/n:(.*)$",
+			                                "^/ns:(.*)$",
 			                                "$1", RegexOptions.Compiled | RegexOptions.IgnoreCase)
 			                       .Trim();
 			return param;
