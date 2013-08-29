@@ -69,14 +69,14 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>if not exist "$(SolutionDir)..\Published\" (
-  mkdir "$(SolutionDir)..\Published\"
+    <PostBuildEvent>if not exist "$(SolutionDir)..\Build\" (
+  mkdir "$(SolutionDir)..\Build\"
 )
 
-xcopy "$(TargetFileName)" "$(SolutionDir)..\Published\" /y
-xcopy "$(TargetFileName).config" "$(SolutionDir)..\Published\" /y
-xcopy "$(TargetDir)*.dll" "$(SolutionDir)..\Published\" /y
-xcopy "$(TargetDir)*.xml" "$(SolutionDir)..\Published\" /y
+xcopy "$(TargetFileName)" "$(SolutionDir)..\Build\" /y
+xcopy "$(TargetFileName).config" "$(SolutionDir)..\Build\" /y
+xcopy "$(TargetDir)*.dll" "$(SolutionDir)..\Build\" /y
+xcopy "$(TargetDir)*.xml" "$(SolutionDir)..\Build\" /y
 </PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
