@@ -1,11 +1,11 @@
-﻿using System;
+﻿using Boilerplate.Builder.Services.Interfaces;
+using Boilerplate.Builder.Services.Utilities.Interfaces;
+using Boilerplate.Builder.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using Boilerplate.Builder.Services.Interfaces;
-using Boilerplate.Builder.Services.Utilities.Interfaces;
-using Boilerplate.Builder.ViewModels;
 
 namespace Boilerplate.Builder.Services
 {
@@ -71,21 +71,9 @@ namespace Boilerplate.Builder.Services
 		/// <param name="ns">Namespace to be applied.</param>
 		private void ChangeNamespaceOnSolution(string ns)
 		{
-			var sln = Directory.GetFiles(this._sourceCodesPath).Single(p => p.EndsWith(".sln"));
+			var file = Directory.GetFiles(this._sourceCodesPath).Single(p => p.EndsWith(".sln"));
 
-			//	Changes namespace within the solution file.
-			string converted;
-			using (var reader = new StreamReader(sln))
-			{
-				var content = reader.ReadToEnd();
-				converted = content.Replace("Application.", ns + ".");
-			}
-			using (var writer = new StreamWriter(sln, false, Encoding.UTF8))
-			{
-				writer.Write(converted);
-			}
-			//	Renames the solution file.
-			File.Move(sln, sln.Replace("Application.", ns + "."));
+			this.ChangeNamespaceOnFile(ns, file);
 		}
 
 		/// <summary>
@@ -95,43 +83,81 @@ namespace Boilerplate.Builder.Services
 		private void ChangeNamespaceOnProjects(string ns)
 		{
 			var directories = this.GetProjectDirectories();
-			var files = new List<string>();
 			foreach (var directory in directories)
 			{
-				var fs = this.GetFilesFromDirectory(directory);
-				files.AddRange(fs);
+				var files = new List<string>(this.GetFilesFromDirectory(directory));
 
-				var subdirectories = Directory.GetDirectories(directory)
-				                              .Where(p => this._settings
-				                                              .DirectoriesToExclude
-				                                              .Contains(p.Split(new string[] {"\\"},
-				                                                                StringSplitOptions.RemoveEmptyEntries)
-				                                                         .Last()));
+				var subdirectories = this.GetSubdirectories(directory);
 				foreach (var subdirectory in subdirectories)
-				{
-					fs = this.GetFilesFromDirectory(subdirectory);
-					files.AddRange(fs);
-				}
+					files.AddRange(this.GetFilesFromDirectory(subdirectory));
+
+				//	Changes namespace on each file.
+				this.ChangeNamespaceOnFile(ns, files);
 			}
 		}
 
 		/// <summary>
-		/// Gets the list of directories within the project recursively.
+		/// Changes namespace on a file.
 		/// </summary>
-		/// <param name="directory">Parent directory.</param>
-		/// <returns>Returns the list of directories within the project recursively.</returns>
-		private IList<string> GetDirectoriesInProject(string directory)
+		/// <param name="ns">Namespace to be applied.</param>
+		/// <param name="file">Filepath.</param>
+		private void ChangeNamespaceOnFile(string ns, string file)
+		{
+			this.ChangeNamespaceOnFile(ns, new List<string>() {file});
+		}
+
+		/// <summary>
+		/// Changes namespace on list of files.
+		/// </summary>
+		/// <param name="ns">Namespace to be applied.</param>
+		/// <param name="files">List of filepaths.</param>
+		private void ChangeNamespaceOnFile(string ns, IEnumerable<string> files)
+		{
+			foreach (var file in files)
+			{
+				//	Changes namespaces on contents of the file.
+				string converted;
+				using (var reader = new StreamReader(file))
+				{
+					var content = reader.ReadToEnd();
+					converted = content.Replace("Application.", String.Format("{0}.", ns));
+				}
+				using (var writer = new StreamWriter(file, false, Encoding.UTF8))
+				{
+					writer.Write(converted);
+				}
+
+				//	Renames if the filename itself contains namespace.
+				var filename = Path.GetFileName(file);
+				if (filename == null || !filename.Contains("Application."))
+					continue;
+
+				var path = Path.GetDirectoryName(file);
+				File.Move(file, String.Format("{0}\\{1}", path, filename.Replace("Application.", String.Format("{0}.", ns))));
+			}
+		}
+
+		/// <summary>
+		/// Gets the list of subdirectories under the given directory.
+		/// </summary>
+		/// <param name="directory">Directory path.</param>
+		/// <param name="recursive">Value that specifies whether to search subdirectories recursively or not.</param>
+		/// <returns>Returns the list of subdirectories under the given directory.</returns>
+		public IList<string> GetSubdirectories(string directory, bool recursive = true)
 		{
 			var subdirectories = Directory.GetDirectories(directory)
-			                              .Where(p => this._settings
-			                                              .DirectoriesToExclude
-			                                              .Contains(p.Split(new string[] {"\\"},
-			                                                                StringSplitOptions.RemoveEmptyEntries)
-			                                                         .Last()))
+			                              .Where(p => !this._settings
+			                                               .DirectoriesToExclude
+			                                               .Contains(p.Split(new string[] {"\\"},
+			                                                                 StringSplitOptions.RemoveEmptyEntries)
+			                                                          .Last()))
 			                              .ToList();
-			var directories = subdirectories;
-			foreach (var subdirectory in subdirectories)
-				directories.AddRange(this.GetDirectoriesInProject(subdirectory));
+			if (!recursive)
+				return subdirectories;
+
+			var directories = new List<string>(subdirectories);
+			foreach (var subdirectory in subdirectories.Where(p => Directory.GetDirectories(p).Any()))
+				directories.AddRange(this.GetSubdirectories(subdirectory, recursive));
 
 			return directories;
 		}
@@ -141,13 +167,13 @@ namespace Boilerplate.Builder.Services
 		/// </summary>
 		/// <param name="directory">Directory path to get the list of files.</param>
 		/// <returns>Returns the list of files from the given directory path, except files to be excluded.</returns>
-		private IList<string> GetFilesFromDirectory(string directory)
+		public IList<string> GetFilesFromDirectory(string directory)
 		{
 			var files = Directory.GetFiles(directory, "*.*")
-			                     .Where(p => !this._settings
-			                                      .FileExtensionsToExclude
-			                                      .Contains(Path.GetExtension(p)))
-			                     .ToList();
+								 .Where(p => !this._settings
+												  .FileExtensionsToExclude
+												  .Contains(Path.GetExtension(p)))
+								 .ToList();
 			return files;
 		}
 
