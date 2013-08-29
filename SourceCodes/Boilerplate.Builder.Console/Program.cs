@@ -79,7 +79,7 @@ namespace Boilerplate.Builder.Console
 			sb.AppendLine();
 			sb.AppendLine("Parameter:");
 			sb.AppendLine("  /ns:[Namespace]  Sets the default namespace of the boilerplate.");
-			sb.AppendLine("                  If empty, the default namespace will be \"Application\".");
+			sb.AppendLine("                   If empty, the default namespace will be \"Application\".");
 			sb.AppendLine();
 
 			System.Console.WriteLine(sb.ToString());
