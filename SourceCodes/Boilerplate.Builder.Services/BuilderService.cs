@@ -3,8 +3,10 @@ using Boilerplate.Builder.Services.Utilities.Interfaces;
 using Boilerplate.Builder.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 
 namespace Boilerplate.Builder.Services
@@ -49,8 +51,8 @@ namespace Boilerplate.Builder.Services
 		private string GetBoilerplatesDirectoryPath(string directoryName)
 		{
 			var path = String.Format(@"{0}\{1}",
-			                         this._settings.BoilerplatePath,
-			                         directoryName);
+									 this._settings.BoilerplatePath,
+									 directoryName);
 			return path;
 		}
 
@@ -61,10 +63,40 @@ namespace Boilerplate.Builder.Services
 		public void ProcessRequests(ConsoleParameter parameter)
 		{
 			var ns = parameter.Namespace;
+			this.PrepareBoilerplates();
 			this.ChangeNamespaceOnSolution(ns);
 			this.ChangeNamespaceOnProjects(ns);
 			this.ChangeNamespaceOnPackages(ns);
 			this.ChangeNamespaceOnDirectories(ns);
+		}
+
+		/// <summary>
+		/// Prepares the boilerplate templates into the build directory.
+		/// </summary>
+		private void PrepareBoilerplates()
+		{
+			var directory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+			var bppath = String.Format(@"{0}\..\SourceCodes\{1}", directory, this._settings.BoilerplatePath);
+			var buildpath = String.Format(@"{0}\{1}", directory, this._settings.BoilerplatePath);
+
+			using (var process = new Process())
+			{
+				var psi = new ProcessStartInfo("xcopy.exe")
+					{
+						UseShellExecute = false,
+						WorkingDirectory = directory,
+						RedirectStandardInput = true,
+						RedirectStandardOutput = true,
+						Arguments = String.Format("\"{0}\" \"{1}\" /e /y",
+												  bppath,
+												  buildpath)
+					};
+				process.StartInfo = psi;
+				process.Start();
+
+				process.WaitForExit();
+				//exitCode = process.ExitCode;
+			}
 		}
 
 		/// <summary>
@@ -74,7 +106,7 @@ namespace Boilerplate.Builder.Services
 		private void ChangeNamespaceOnSolution(string ns)
 		{
 			var file = Directory.GetFiles(this._sourceCodesPath)
-			                    .Single(p => p.EndsWith(".sln"));
+								.Single(p => p.EndsWith(".sln"));
 
 			this.ChangeNamespaceOnFile(ns, file);
 		}
@@ -106,7 +138,7 @@ namespace Boilerplate.Builder.Services
 		private void ChangeNamespaceOnPackages(string ns)
 		{
 			var file = Directory.GetFiles(this._sourceCodesPath + @"\packages")
-			                    .Single(p => p.EndsWith(".config"));
+								.Single(p => p.EndsWith(".config"));
 
 			this.ChangeNamespaceOnFile(ns, file);
 		}
@@ -121,7 +153,7 @@ namespace Boilerplate.Builder.Services
 			foreach (var directory in directories)
 			{
 				Directory.Move(directory,
-				               directory.Replace("Application.", String.Format("{0}.", ns)));
+							   directory.Replace("Application.", String.Format("{0}.", ns)));
 			}
 		}
 
@@ -215,8 +247,8 @@ namespace Boilerplate.Builder.Services
 
 				var path = Path.GetDirectoryName(file);
 				File.Move(file, String.Format("{0}\\{1}",
-				                              path,
-				                              filename.Replace("Application.", String.Format("{0}.", ns))));
+											  path,
+											  filename.Replace("Application.", String.Format("{0}.", ns))));
 			}
 		}
 
