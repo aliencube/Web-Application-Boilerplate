@@ -87,8 +87,9 @@ namespace Boilerplate.Builder.Services.Utilities
 				if (String.IsNullOrWhiteSpace(value))
 					value = "gif,ico,jpg,ldf,mdf,png,user,xml";
 
-				var results = value.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries)
-								   .ToList();
+				var results = value.Split(new string[] {","}, StringSplitOptions.RemoveEmptyEntries)
+				                   .Select(p => String.Format(".{0}", p))
+				                   .ToList();
 				return results;
 			}
 		}
