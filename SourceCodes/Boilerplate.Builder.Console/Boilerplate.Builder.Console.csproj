@@ -69,14 +69,31 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>if not exist "$(SolutionDir)..\Build\" (
+    <PostBuildEvent>xcopy "$(ProjectDir)*.cmd" "$(TargetDir)" /y
+
+if not exist "$(TargetDir)Boilerplates\" (
+  mkdir "$(TargetDir)Boilerplates\"
+)
+xcopy "$(SolutionDir)Boilerplates\*.*" "$(TargetDir)Boilerplates\" /e /y
+
+if not exist "$(TargetDir)Boilerplates\SourceCodes\packages\" (
+  mkdir "$(TargetDir)Boilerplates\SourceCodes\packages\"
+)
+xcopy "$(SolutionDir)Boilerplates\SourceCodes\packages\*.*" "$(TargetDir)Boilerplates\SourceCodes\packages\" /e /y
+
+if not exist "$(SolutionDir)..\Build\" (
   mkdir "$(SolutionDir)..\Build\"
+)
+if not exist "$(SolutionDir)..\Build\Boilerplates" (
+  mkdir "$(SolutionDir)..\Build\Boilerplates"
 )
 
 xcopy "$(TargetFileName)" "$(SolutionDir)..\Build\" /y
 xcopy "$(TargetFileName).config" "$(SolutionDir)..\Build\" /y
+xcopy "$(TargetDir)*.cmd" "$(SolutionDir)..\Build\" /y
 xcopy "$(TargetDir)*.dll" "$(SolutionDir)..\Build\" /y
 xcopy "$(TargetDir)*.xml" "$(SolutionDir)..\Build\" /y
+xcopy "$(TargetDir)Boilerplates\*.*" "$(SolutionDir)..\Build\Boilerplates\" /e /y
 </PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

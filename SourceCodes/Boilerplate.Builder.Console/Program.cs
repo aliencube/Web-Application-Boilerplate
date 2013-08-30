@@ -75,7 +75,7 @@ namespace Boilerplate.Builder.Console
 		{
 			var sb = new StringBuilder();
 			sb.AppendLine("Usage:");
-			sb.AppendLine("  WebApplicationBoilerplateBuilderConsole.exe /n:[Default Namespace]");
+			sb.AppendLine("  WebApplicationBoilerplateBuilderConsole.exe /ns:[Default Namespace]");
 			sb.AppendLine();
 			sb.AppendLine("Parameter:");
 			sb.AppendLine("  /ns:[Namespace]  Sets the default namespace of the boilerplate.");
@@ -102,6 +102,7 @@ namespace Boilerplate.Builder.Console
 				_log.Info("Build started...");
 
 			IBuilderService service = new BuilderService(settings);
+			service.StatusChanged += Service_StatusChanged;
 			service.ProcessRequests(param);
 
 			if (_log.IsInfoEnabled)
@@ -121,13 +122,33 @@ namespace Boilerplate.Builder.Console
 			if (!ns.ToLower().StartsWith("/ns:"))
 				throw new ArgumentException("Invalid arguments");
 
-			param.Namespace = Regex.Replace(ns.Trim(),
-			                                "^/ns:(.*)$",
-			                                "$1", RegexOptions.Compiled | RegexOptions.IgnoreCase)
-			                       .Trim();
+			ns = Regex.Replace(ns.Trim(),
+							   "^/ns:(.*)$",
+							   "$1", RegexOptions.Compiled | RegexOptions.IgnoreCase)
+					  .Trim();
+			if (String.IsNullOrWhiteSpace(ns))
+				throw new ArgumentException("No namespace found");
+
+			param.Namespace = ns;
+
 			return param;
 		}
 
 		#endregion Methods
+
+		#region Event Handlers
+
+		/// <summary>
+		/// Occurs when status changed event is raised.
+		/// </summary>
+		/// <param name="sender">Object that triggers the event.</param>
+		/// <param name="e">Provides data for the status changed event.</param>
+		private static void Service_StatusChanged(object sender, Services.Events.StatusChangedEventArgs e)
+		{
+			if (_log.IsInfoEnabled)
+				_log.Info(e.StatusMessage);
+		}
+
+		#endregion Event Handlers
 	}
 }

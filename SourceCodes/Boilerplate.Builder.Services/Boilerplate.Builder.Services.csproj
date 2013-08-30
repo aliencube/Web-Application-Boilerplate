@@ -40,6 +40,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BuilderService.cs" />
+    <Compile Include="Events\ExceptionThrownEventArgs.cs" />
+    <Compile Include="Events\StatusChangedEventArgs.cs" />
     <Compile Include="Interfaces\IBuilderService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

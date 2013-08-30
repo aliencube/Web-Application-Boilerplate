@@ -1,9 +1,9 @@
-﻿using Boilerplate.Builder.Services.Interfaces;
+﻿using Boilerplate.Builder.Services.Events;
+using Boilerplate.Builder.Services.Interfaces;
 using Boilerplate.Builder.Services.Utilities.Interfaces;
 using Boilerplate.Builder.ViewModels;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -41,6 +41,46 @@ namespace Boilerplate.Builder.Services
 
 		#endregion Properties
 
+		#region Events
+
+		/// <summary>
+		/// Occurs when status changed event is raised.
+		/// </summary>
+		public event EventHandler<StatusChangedEventArgs> StatusChanged;
+
+		/// <summary>
+		/// Occurs when exception thrown event is raised.
+		/// </summary>
+		public event EventHandler<ExceptionThrownEventArgs> ExceptionThrown;
+
+		#endregion Events
+
+		#region Event Handlers
+
+		/// <summary>
+		/// Occurs when status changed event is raised.
+		/// </summary>
+		/// <param name="e">Provides data for the status changed event.</param>
+		protected virtual void OnStatusChanged(StatusChangedEventArgs e)
+		{
+			var handler = StatusChanged;
+			if (handler != null)
+				handler(this, e);
+		}
+
+		/// <summary>
+		/// Occurs when exception thrown event is raised.
+		/// </summary>
+		/// <param name="e">Provides data for the exception thrown event.</param>
+		protected virtual void OnExceptionThrown(ExceptionThrownEventArgs e)
+		{
+			var handler = ExceptionThrown;
+			if (handler != null)
+				handler(this, e);
+		}
+
+		#endregion Event Handlers
+
 		#region Methods
 
 		/// <summary>
@@ -63,40 +103,10 @@ namespace Boilerplate.Builder.Services
 		public void ProcessRequests(ConsoleParameter parameter)
 		{
 			var ns = parameter.Namespace;
-			this.PrepareBoilerplates();
 			this.ChangeNamespaceOnSolution(ns);
 			this.ChangeNamespaceOnProjects(ns);
 			this.ChangeNamespaceOnPackages(ns);
 			this.ChangeNamespaceOnDirectories(ns);
-		}
-
-		/// <summary>
-		/// Prepares the boilerplate templates into the build directory.
-		/// </summary>
-		private void PrepareBoilerplates()
-		{
-			var directory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-			var bppath = String.Format(@"{0}\..\SourceCodes\{1}", directory, this._settings.BoilerplatePath);
-			var buildpath = String.Format(@"{0}\{1}", directory, this._settings.BoilerplatePath);
-
-			using (var process = new Process())
-			{
-				var psi = new ProcessStartInfo("xcopy.exe")
-					{
-						UseShellExecute = false,
-						WorkingDirectory = directory,
-						RedirectStandardInput = true,
-						RedirectStandardOutput = true,
-						Arguments = String.Format("\"{0}\" \"{1}\" /e /y",
-												  bppath,
-												  buildpath)
-					};
-				process.StartInfo = psi;
-				process.Start();
-
-				process.WaitForExit();
-				//exitCode = process.ExitCode;
-			}
 		}
 
 		/// <summary>
@@ -109,6 +119,8 @@ namespace Boilerplate.Builder.Services
 								.Single(p => p.EndsWith(".sln"));
 
 			this.ChangeNamespaceOnFile(ns, file);
+
+			this.OnStatusChanged(new StatusChangedEventArgs("Solution updated!"));
 		}
 
 		/// <summary>
@@ -129,6 +141,8 @@ namespace Boilerplate.Builder.Services
 				//	Changes namespace on each file.
 				this.ChangeNamespaceOnFiles(ns, files);
 			}
+
+			this.OnStatusChanged(new StatusChangedEventArgs("Projects updated!"));
 		}
 
 		/// <summary>
@@ -141,6 +155,8 @@ namespace Boilerplate.Builder.Services
 								.Single(p => p.EndsWith(".config"));
 
 			this.ChangeNamespaceOnFile(ns, file);
+
+			this.OnStatusChanged(new StatusChangedEventArgs("Package updated!"));
 		}
 
 		/// <summary>
@@ -155,6 +171,8 @@ namespace Boilerplate.Builder.Services
 				Directory.Move(directory,
 							   directory.Replace("Application.", String.Format("{0}.", ns)));
 			}
+
+			this.OnStatusChanged(new StatusChangedEventArgs("Directory updated!"));
 		}
 
 		/// <summary>
